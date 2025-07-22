@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fraud Detection System</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Transaction Fraud Detection</h1>
+        
+        <!-- Manual Transaction Input -->
+        <div class="card">
+            <h2>Check Your Transaction</h2>
+            <p class="info-text">Enter the transaction amount and category to check for potential fraud.</p>
+            <form action="/predict" method="POST" id="transaction-form">
+                <div>
+                    <label for="amount">Transaction Amount ($):</label>
+                    <input type="number" id="amount" name="amount" step="0.01" min="0" placeholder="e.g., 100.50" required>
+                </div>
+                <div>
+                    <label for="category">Transaction Category:</label>
+                    <select id="category" name="category" required>
+                        <option value="" disabled selected>Select a category</option>
+                        <option value="Shopping">Shopping</option>
+                        <option value="Travel">Travel</option>
+                        <option value="Food">Food</option>
+                    </select>
+                </div>
+                <button type="submit">Check for Fraud</button>
+            </form>
+        </div>
+        
+        <!-- Demo Transactions -->
+        <div class="card">
+            <h2>Demo Transactions</h2>
+            <table id="transaction-table">
+                <thead id="table-header">
+                    <tr>
+                        <th>Transaction ID</th>
+                        <th>Amount</th>
+                        <th>Category</th>
+                        <th>Date</th>
+                        <th>Fraud Status</th>
+                    </tr>
+                </thead>
+                <tbody id="table-body">
+                    {% for transaction in transactions %}
+                    <tr>
+                        <td>{{ transaction.TransactionID }}</td>
+                        <td>${{ transaction.Amount }}</td>
+                        <td>{{ transaction.Category }}</td>
+                        <td>{{ transaction.Date }}</td>
+                        <td class="{{ 'text-red' if transaction.IsFraud == 1 else 'text-green' }}">
+                            {{ 'Fraudulent' if transaction.IsFraud == 1 else 'Non-Fraudulent' }}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            <button id="fetch-more" onclick="toggleTableView()">Fetch More</button>
+        </div>
+    </div>
+    <script src="/static/js/script.js"></script>
+</body>
+</html>
